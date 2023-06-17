@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moviechat</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <h1>Moviechat</h1>
+  <div id="input-field">
+    <input type="text" placeholder="Enter your webpage" id="webpageInput" />
+    <button id="runCommandBtn">Run Command</button>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const webpageInput = document.getElementById('webpageInput');
+      const runCommandBtn = document.getElementById('runCommandBtn');
+
+      runCommandBtn.addEventListener('click', function() {
+        const webpage = webpageInput.value;
+        // Run your command here
+        console.log('Command executed with webpage:', webpage);
+      });
+    });
+  </script>
+</body>
+</html>
