@@ -29,7 +29,12 @@ body {
   flex-direction: column;
 }
 
-#small-text-row, #brand-row, #image-assets-row, #color-assets-row {
+#small-text-row, #brand-section, #assets-column, #keywords-column, #campaign-identity-row, #updateButton {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+#small-text-row, #brand-row, #image-assets-row, #color-assets-row, #keywords-row {
   display: flex;
   flex-direction: row;
 }
@@ -39,13 +44,83 @@ body {
   justify-content: space-between;
 }
 
+#keywords-row {
+  display: inline-flex;
+  padding-left: 22px;
+  margin-top: 6px;
+}
+
+.keyword-tag {
+  margin-right: 8px;
+  background-color: lightgray;
+  color: rgb(90, 90, 90);
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
 #brand-row {
   justify-content: space-evenly;
   display: inline-flex;
 }
 
+#image-assets-row {
+  padding-left: 18px;
+  margin-bottom: 12px;
+}
+
+.image-asset {
+  opacity: 0.0;
+  transition: opacity 0.8s ease;
+  margin-right: 12px;
+}
+
 .hex-color {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
+  background-color: #141134;
+  color: white;
+  padding: 2px 6px;
+  transform: translate(6px, 46px);
+  position: absolute;
+  border-radius: 3px;
+}
+
+.hex-circle {
+  transition: opacity 0.4s ease;
+  opacity: 0.0;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 16px;
+}
+
+.upload-button {
+  display: flex;
+  justify-content: center;
+}
+
+#plus-icon-clickable {
+  padding: 0px 22px;
+  margin-top: 0px;
+  font-size: 50px;
+  border: dashed 2px;
+  border-radius: 6px;
+  color: #b3bcc1;
+  transform: translateY(0px);
+}
+
+#hex-plus-clickable {
+  padding: 0px 10px;
+  margin-top: 0px;
+  font-size: 30px;
+  border: dashed 2px;
+  border-radius: 50%;
+  color: #b3bcc1;
+  transform: translateY(1px);
+  margin-left: 12px;
+}
+
+#color-input {
+
 }
 
 #campaign-identity-row {
@@ -58,7 +133,6 @@ body {
   flex-direction: row;
 }
 
-
 #loading-brand-icon {
   width: 50px;
   height: 50px;
@@ -66,6 +140,7 @@ body {
 
 #input-field {
   border-radius: 20px;
+  padding: 60px 80px;
   background-color: #141134;
   display: flex;
   flex-direction: column;
@@ -73,7 +148,7 @@ body {
   align-items: center;
   z-index: 2;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  width: 354px;
+  width: 420px;
   height: 262px;
   transition: width 0.4s ease, height 0.4s ease;
 }
@@ -82,16 +157,17 @@ body {
   color: white;
   font-size: 30px;
   text-align: center;
-  padding: 4px 20px;
+  padding: 0px 20px;
+  display: inline;
 }
 
 #input-field p {
   margin: 20px 20px;
-  padding: 0;
+  padding: 0px;
   color: white;
   font-size: 16px;
   text-align: left;
-  width: 300px;
+  width: 350px;
 }
 
 #input-field input {
@@ -100,20 +176,25 @@ body {
   padding: 4px;
   padding-left: 10px;
   margin: 2px 20px;
-  height: 30px;
-  width: 300px;
+  margin-top: 16px;
+  font-size: 18px;
+  height: 40px;
+  width: 340px;
   transition: width 0.1s ease, padding 0.1s ease, padding-left 0.1s ease;
 }
 
 #input-field button {
-  margin-top: 12px;
+  margin-top: 30px;
   padding: 6px;
   border-radius: 20px;
   border: none;
   color: white;
-  background-color: #88EA66;
-  width: 150px;
+  background-color: #7EB744;
+  width: 180px;
+  height: 40px;
   margin-bottom: 30px;
+  font-size: large;
+  font-weight: bold;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
@@ -124,4 +205,9 @@ body {
   width: 200px;
   height: 200px;
   z-index: 1;
+}
+
+#overlay {
+  width: 100%;
+  height: 100%;
 }
