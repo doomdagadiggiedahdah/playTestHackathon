@@ -23,7 +23,7 @@ let keywordsArray = [
   'bold',
   'energetic',
   'adventurous'
-]
+];
 const colorThief = new ColorThief();
 
 let promises = [];
@@ -164,6 +164,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+async function readJsonFile(filename) {
+  const response = await fetch(filename);
+  const data = await response.json();
+  return data;
+}
+
 async function scrapeToGen(url) {
   // referencing relevant elements
   const targetDiv = document.getElementById('input-field');
@@ -180,6 +186,9 @@ async function scrapeToGen(url) {
 
   // pythonProcess.stdin.write(url); // Write the image buffer to Python script's stdin
   // pythonProcess.stdin.end();
+
+  const brandKeywordsJsonFilename = "brand_scraper/cleaned_brand_keywords.json"
+  keywordsArray = await readJsonFile(brandKeywordsJsonFilename)
 
   // Expand dark blue original container (note: make this run upon getting .py data back)
   await new Promise(resolve => setTimeout(resolve, 3000));
@@ -319,7 +328,9 @@ async function scrapeToGen(url) {
   keywordsColumn.appendChild(keywordsContainer);
   keywordsColumn.style.opacity = 1.0;
 
-  createKeywordTagOnDelay(keywordsArray);
+  console.log(keywordsArray)
+
+  await createKeywordTagOnDelay(keywordsArray);
 
   await new Promise(resolve => setTimeout(resolve, 1200));
 
@@ -428,10 +439,10 @@ async function scrapeToGen(url) {
   });
 }
 
-async function createKeywordTagOnDelay(array) {
-  for (let i = 0; i < array.length; i++) {
-    const keyword = array[i];
-    createKeywordTag(keyword);
+async function createKeywordTagOnDelay(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    const keyword = arr[i];
+    await createKeywordTag(keyword);
     await new Promise(resolve => setTimeout(resolve, 300));
   }
 }
