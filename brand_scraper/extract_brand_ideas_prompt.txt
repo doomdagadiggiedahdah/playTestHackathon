@@ -1,0 +1,17 @@
+Output a single-line JSON of up to 10 branding and advertising ideas from the page.
+
+Ideas should have the following qualities:
+* engaging and unique (have high text burstiness)
+* compelling enough to include in a high-quality ad
+* quotes (if too long, shorten to become slogans)
+* keywords
+* high quality slogans
+
+Ideas should not have the following qualities:
+* specific locations
+* boring business terms (e.g. sales, brand, investment, growth)
+* people names
+
+If term isn't in English, include the English translation in parentheses.
+
+JSON should follow the schema [{"branding_idea" => str, "ad_potential" => 0.0-1.0, "frequency" => int}]. Normalize keywords all to lowercase.

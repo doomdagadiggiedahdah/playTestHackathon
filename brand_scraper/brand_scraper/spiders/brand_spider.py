@@ -1,18 +1,21 @@
+import json
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 from urllib.parse import urlparse
+from ..utils import clean_html, read_prompt_text, num_tokens_from_messages_cl100kbase, run_prompt_with_retry
 
-from brand_scraper.items import BrandScraperItem
+from brand_scraper.items import ImageItem, WebPageItem, SVGItem
 
 class BrandSpider(CrawlSpider):
     name = 'brand_spider'
     allowed_domains = None
     start_urls = None
 
-    # Define the rules for the spider
     rules = (
         Rule(LinkExtractor(), callback='parse_item', follow=True),
     )
+
+    extract_brand_keywords_prompt = read_prompt_text("./extract_brand_keyword_prompt.txt")
 
     def __init__(self, *args, **kwargs):
         super(BrandSpider, self).__init__(*args, **kwargs)
@@ -28,33 +31,80 @@ class BrandSpider(CrawlSpider):
             # Add other common subdomains if needed
         ]
 
-    # Define a function to filter image and media URLs
-    def is_media(self, url):
-        media_extensions = ['.jpg', '.jpeg', '.png', '.webp']
-        return any(url.endswith(ext) for ext in media_extensions)
+        self.seen_image_urls = set()
+        self.seen_svg_urls = set()
+        self.seen_webpage_urls = set()
 
     def parse_item(self, response):
         self.logger.info('Processing: %s' % response.url)
+        
+        # Extract image URLs from the img tag
+        image_urls = [
+            img_url for img_url in response.css('img::attr(src)').getall()
+            if not img_url.lower().endswith('.svg')
+        ]
+        svg_urls = response.css('img::attr(src)').re(".*\.svg$")
+        print(svg_urls)
 
-        # Filter image and media URLs
-        if not self.is_media(response.url):
-            # Save non-image and non-media URLs
-            item = BrandScraperItem()
-            item['url'] = response.url
-            
-            # Extract brand keywords here (using GPT-3.5-turbo-16k API)
-            # item['brand_keywords'] = extracted_brand_keywords
+        # If new SVG URLs are found
+        new_svg_urls = set(svg_urls) - self.seen_svg_urls
+        if new_svg_urls:
+            self.seen_svg_urls.update(new_svg_urls)
 
-            return item
+            # Download new SVGs
+            svg_item = SVGItem()
+            svg_item["svg_urls"] = [response.urljoin(svg_url) for svg_url in new_svg_urls]
+            yield svg_item
+
+        # If new image URLs are found
+        new_image_urls = set(image_urls) - self.seen_image_urls
+        if new_image_urls:
+            self.seen_image_urls.update(new_image_urls)
+
+            # Download new images
+            image_item = ImageItem()
+            image_item["image_urls"] = [response.urljoin(img_url) for img_url in new_image_urls]
+            yield image_item
+
+        # If new webpage URLs are found
+        new_image_urls = set(image_urls) - self.seen_image_urls
+        webpage_item = WebPageItem()
+        webpage_item['url'] = response.url
+
+        html_body_text = response.text
+        cleaned_html = clean_html(html_body_text)
+
+        # Extract brand keywords here (using GPT-3.5-turbo-16k API)
+        replace_texts = {
+            "COMPANY": "Red Bull",
+            "INSERT": cleaned_html,
+        }
+        worthy_analysis_prompt = read_prompt_text("./worthy_analysis_prompt.txt", replace_texts)
+
+        prompt_chain = [
+            {
+                "role": "user",
+                "content": worthy_analysis_prompt,
+            }
+        ]
+
+        initial_message_tokens = num_tokens_from_messages_cl100kbase(prompt_chain)
+
+        is_worth_analysis_response = run_prompt_with_retry(prompt_chain, initial_message_tokens)
+
+        if "TRUE" in is_worth_analysis_response:
+            remainder_prompt_chain = [
+                {"role": "assistant", "content": "TRUE"},
+                {"role": "user", "content": self.extract_brand_keywords_prompt},
+            ]
+            prompt_chain += remainder_prompt_chain
+            current_message_tokens = num_tokens_from_messages_cl100kbase(prompt_chain)
+            prompt_response = run_prompt_with_retry(prompt_chain, current_message_tokens)
+            extracted_brand_keywords = json.loads(prompt_response)
         else:
-            # Download image and media files
-            item = BrandScraperItem()
-            
-            # Identify if the media url is an image
-            image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-            if any(response.url.endswith(ext) for ext in image_extensions):
-                item["image_urls"] = [response.url]
-            else:
-                item["file_urls"] = [response.url]
+            extracted_brand_keywords = None
+        
+        webpage_item['brand_keywords'] = extracted_brand_keywords
+        webpage_item['item_type'] = 'web_page'
 
-            return item
+        yield webpage_item

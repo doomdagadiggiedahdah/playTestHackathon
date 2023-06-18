@@ -24,7 +24,8 @@ CONCURRENT_REQUESTS = 8
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 2
+DOWNLOAD_DELAY = 1
+
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -72,13 +73,15 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'brand_scraper.pipelines.BrandScraperPipeline': 300,
-    'scrapy.pipelines.images.ImagesPipeline': 1,
-    'scrapy.pipelines.files.FilesPipeline': 1,
+    'brand_scraper.pipelines.WebPagePipeline': 100,
+    'brand_scraper.pipelines.DirectSVGDownloadPipeline': 200,
+    'scrapy.pipelines.images.ImagesPipeline': 300, 
+    # 'scrapy.pipelines.files.FilesPipeline': 100,
 }
 
-FILES_STORE = 'brand_scraper/files'
-MEDIA_STORE = 'brand_scraper/media'
+# FILES_STORE = 'brand_scraper/media/svgs'
+SVG_STORE = 'brand_scraper/media/svgs'
+IMAGES_STORE = 'brand_scraper/media/images'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

@@ -1,0 +1,2 @@
+You are an expert copywriter and advertiser. You are doing advertising and branding for the company COMPANY. Analyze the following text carefully. Only output TRUE or FALSE if this webpage is worth analyzing for crucial brand keywords:
+{INSERT}

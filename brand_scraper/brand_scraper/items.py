@@ -1,13 +1,16 @@
 import scrapy
 
-class BrandScraperItem(scrapy.Item):
-    url = scrapy.Field()              # Stores the URL of the webpage
-    brand_keywords = scrapy.Field()   # Stores the extracted brand keywords
+class WebPageItem(scrapy.Item):
+    url = scrapy.Field()
+    brand_keywords = scrapy.Field()
+    item_type = scrapy.Field(default='web_page')
 
-    # For storing image and media files metadata
-    images = scrapy.Field()           # Stores image metadata
-    files = scrapy.Field()            # Stores non-image media file metadata
+class ImageItem(scrapy.Item):
+    image_urls = scrapy.Field()
+    images = scrapy.Field()
+    svg_urls = scrapy.Field()
+    svgs = scrapy.Field()
 
-    # For specifying image and media URLs to be downloaded
-    image_urls = scrapy.Field()       # Stores the URLs of images to be downloaded
-    file_urls = scrapy.Field()        # Stores the URLs of non-image media files to be downloaded
+class SVGItem(scrapy.Item):
+    svg_urls = scrapy.Field()
+    files = scrapy.Field()

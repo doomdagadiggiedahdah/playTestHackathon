@@ -1,1 +1,9 @@
 env/
+**/__pycache__/
+.env
+*.jsonl
+*.svg
+*.jpeg
+*.jpg
+*.json
+brand_scraper/brand_scraper/media/*

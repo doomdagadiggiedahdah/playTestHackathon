@@ -1,0 +1,18 @@
+Output a single-line JSON of up to 10 branding and advertising keywords and frequency from the page.
+
+Keywords should have the following qualities:
+* has to be an adjective
+* one word
+* engaging and unique (have high text burstiness)
+* compelling enough to include in a high-quality ad
+
+Keywords should not have the following qualities:
+* is not an adjective
+* should not be part of or be the company name (e.g., if company is Red Bull, "red" and "bull" should be excluded)
+* specific locations
+* boring business terms (e.g. sales, brand, investment, growth)
+* people names
+
+If term isn't in English, translate to English.
+
+JSON should follow the schema [{"keyword" => str, "frequency" => int}]. Normalize keywords all to lowercase
