@@ -193,10 +193,6 @@ body {
   margin-left: 12px;
 }
 
-#color-input {
-
-}
-
 #campaign-identity-row {
   display: flex;
   flex-direction: column;
@@ -222,9 +218,22 @@ body {
   align-items: center;
   z-index: 2;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+#campaign-identity-row {
+  font-family: 'Roboto Mono', monospace;
   width: 420px;
   height: 262px;
   transition: width 0.4s ease, height 0.4s ease;
+}
+
+#brand-messaging-field {
+  font-family: 'Roboto Mono', monospace;
+  margin-left: 20px;
+  text-align: left;
+  vertical-align: top;
+  white-space: wrap;
+  height: 80px;
 }
 
 #input-field h2 {

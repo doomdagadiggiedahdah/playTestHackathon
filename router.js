@@ -5,11 +5,11 @@ import ColorThief from './colorthief/dist/color-thief.mjs'
 
 let email;
 let indexingUrl;
-let randText = "Here is a respectful observation of your brand";
+let randText = "Red Bull's brand messaging revolves around the concepts of energy, adventure, and pushing boundaries. As one of the world's most recognizable and successful energy drink brands, Red Bull inspires individuals to `Give You Wings` and embrace an active and exhilarating lifestyle. Red Bull's messaging emphasizes the idea that by consuming their product, individuals can unlock their inner potential, overcome limitations, and achieve extraordinary feats. It encourages people to break free from the ordinary and embrace a life filled with excitement, passion, and relentless pursuit of their dreams. Red Bull's brand messaging also encompasses various extreme sports and events, showcasing athletes who redefine what is possible through their daring and fearless performances. The brand seeks to connect with its target audience by associating itself with high-energy activities, adrenaline-pumping moments, and a sense of adventure. Red Bull aims to inspire individuals to go beyond their comfort zones, challenge the status quo, and embrace a life fueled by passion and relentless drive. Whether it's through sponsoring extreme sports events, hosting music festivals, or supporting innovative initiatives, Red Bull's brand messaging consistently promotes a lifestyle that embodies a bold and fearless spirit.";
 let brandImageAssets = [
-  "https://i.pinimg.com/550x/f0/4b/08/f04b08afcbef3dd40ef1e692d8443ec1.jpg",
-  "https://static.vecteezy.com/system/resources/previews/017/792/880/original/coca-cola-logo-popular-drink-brand-logo-free-vector.jpg",
-  "https://www.apple.com/ac/structured-data/images/open_graph_logo.png"
+  "https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/RedBullEnergyDrink.svg/1200px-RedBullEnergyDrink.svg.png",
+  "https://images.heb.com/is/image/HEBGrocery/001476509-1",
+  "https://images.ctfassets.net/lcr8qbvxj7mh/2TjsaVtJrwScJa4dypRGIQ/e19e64ac7f18d978b06e5e5a722c0766/DRES_US_RBSUM_250_Single_Unit_close_ambient-1.png"
 ];
 let assetsArray = [];
 for (let i = 0; i < brandImageAssets.length; i++) {
@@ -110,6 +110,9 @@ document.addEventListener('DOMContentLoaded', function() {
   })
 
   runCommandBtn.addEventListener('click', function() {
+    runCommandBtn.disabled = true;
+    runCommandBtn.style.cursor = "not-allowed";
+    runCommandBtn.style.backgroundColor = "#B1DF81";
     // getting email value from input field
     email = webpageInput.value;
 
@@ -203,7 +206,7 @@ async function scrapeToGen(url) {
 
   const brandKeywordsJsonFilename = "brand_scraper/cleaned_brand_keywords.json";
   keywordsArray = await readJsonFile(brandKeywordsJsonFilename);
-  keywordsArray = keywordsArray.slice(0, 30);
+  keywordsArray = keywordsArray.slice(0, 8);
 
   // Expand dark blue original container (note: make this run upon getting .py data back)
   await new Promise(resolve => setTimeout(resolve, 3000));
@@ -345,7 +348,8 @@ async function scrapeToGen(url) {
 
   // space for Mat to write row #3
   const campaignHeader = document.createElement('p');
-  const campaignInputField = document.createElement('input');
+  const campaignInputField = document.createElement('textarea');
+  campaignInputField.id = "brand-messaging-field"
   campaignHeader.textContent = "Campaign Identity";
   campaignHeader.style.fontSize = "20px";
   campaignHeader.style.marginBottom = "6px";
@@ -356,6 +360,8 @@ async function scrapeToGen(url) {
   campaignIdentityRow.appendChild(campaignHeader);
   campaignIdentityRow.appendChild(campaignInputField);
   campaignIdentityRow.style.opacity = 1.0;
+  campaignIdentityRow.style.lineHeight = "normal";
+  campaignIdentityRow.style.boxSizing = "border-box";
   typewriter(randText, campaignInputField);
   await new Promise(resolve => setTimeout(resolve, 1800));
   contentButton.style.opacity = 1.0;
@@ -535,14 +541,9 @@ function createKeywordTag(keyword, isAdded = false) {
     if (isAdded) {
       // Remove the keyword tag from the keywords-field
       tag.remove();
-      // Add the keyword tag back to the keywords-row
-      createKeywordTag(keyword);
     } else {
       // Remove the keyword tag from the keywords-row
       tag.remove();
-      // Add the keyword tag to the keywords-field
-      keywordsField.appendChild(tag);
-      createKeywordTag(keyword, true);
     }
   });
 
