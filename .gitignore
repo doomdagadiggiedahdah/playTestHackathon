@@ -6,4 +6,5 @@ env/
 *.jpeg
 *.jpg
 *.json
+*.mp4
 brand_scraper/brand_scraper/media/*

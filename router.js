@@ -213,7 +213,7 @@ async function scrapeToGen(url) {
 
   //update your generated content BUTTON
   const contentButton = document.createElement('button');
-  contentButton.textContent = 'Update Generated Content';
+  contentButton.textContent = 'Make Magic';
   contentButton.id = 'updateButton';
   contentButton.style.position = 'absolute';
   contentButton.style.bottom = '20px';
@@ -330,15 +330,28 @@ async function scrapeToGen(url) {
   typewriter(randText, campaignInputField);
   await new Promise(resolve => setTimeout(resolve, 1800));
   contentButton.style.opacity = 1.0;
-  contentButton.addEventListener('click', function() {
+  contentButton.style.cursor = "pointer";
+  contentButton.addEventListener('click', async function() {
+    contentButton.disabled = true;
+    contentButton.style.backgroundColor = "#B1DF81";
+    contentButton.style.cursor = "not-allowed";
+    contentButton.textContent = "Threading the Wand"
+    await new Promise(resolve => setTimeout(resolve, 4800));
     const overlay = document.createElement('div');
     overlay.id = "overlay";
     const vidContainer = document.createElement('div');
     vidContainer.id = "vid-container";
     const video = document.createElement('video');
     video.id = "video";
+    var isPlaying = false;
     video.addEventListener('click', function() {
-      video.play();
+      if (isPlaying) {
+        video.pause();
+      } else {
+        video.play();
+      }
+      
+      isPlaying = !isPlaying;
     });
     video.src = "bing_chilling.mp4";
     video.style.width = "600px";
@@ -356,9 +369,15 @@ async function scrapeToGen(url) {
     vidContainer.appendChild(video);
     vidContainer.appendChild(canvas);
     let animationIntervalId;
+    let count = 0;
+    let countX = 0;
+    let countY = 60;
 
     // Add event listener for 'play' event
     video.addEventListener('play', function() {
+      count = 0;
+      countX = 0;
+      countY = 60;
       // Start the animation when the video starts playing
       canvas.style.display = "flex";
       animationIntervalId = setInterval(animate, 10);
@@ -378,31 +397,62 @@ async function scrapeToGen(url) {
     const ctx = canvas.getContext('2d');
 
     // Set the canvas dimensions
-    canvas.width = 300;
-    canvas.height = 200;
-    canvas.style.borderRadius = "30px";
+    canvas.width = 50;
+    canvas.height = 40;
+    canvas.style.borderRadius = "10px";
 
     // Define the animation duration and update interval
     const duration = 4000; // Adjust this for speed
 
     // Define the start and end angles for the sine curve
     const startAngle = 0;
-    const endAngle = 720;
+    const endAngle = 270;
 
     // Calculate the number of frames and the angle increment per frame
     const frames = Math.ceil(duration / interval);
     const angleIncrement = (endAngle - startAngle) / frames;
 
     function animate() {
+      count++;
+      console.log(count);
       // // Clear the canvas
+      if (count <= 80) {
+        countX++;
+        canvas.style.opacity = 0;
+      } else if (80 < count && count <= 140) {
+        countX++;
+        countY-= 0.1;
+        canvas.style.opacity = 1;
+      } else if (140 < count && count <= 160) {
+        countX+= 1.2;
+      } else if (160 < count && count <= 220) {
+        countX+=1.3;
+      } else if (221 < count && count <= 280) {
+        countX += 1.1; 
+      } else if (281 < count && count <= 293) {
+        countX += 1.35;
+      } else if (294 < count && count <= 310) {
+        countX += 1.6;
+        countY += 0.08;
+      } else if (311 < count && count <= 389) {
+        countX += 1.8;
+      } else if (390 < count && count <= 408) {
+        countX += 0.5;
+      } else {
+      }
+      let x = countX;
+      let y = countY;
       if (video.ended) {
         return;
       }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      console.log(x, y);
+      canvas.style.left = `${x}px`;
+      canvas.style.top = `${y}px`;
+
 
       // Calculate the current angle based on time elapsed
       const elapsed = performance.now();
-      console.log(elapsed);
       const currentAngle = startAngle + ((elapsed / duration) * (endAngle - startAngle));
 
       // Set the line cap style to round
@@ -411,20 +461,20 @@ async function scrapeToGen(url) {
       // Draw the lines
       for (let i = 0; i < colors.length; i++) {
         const color = colors[i];
-        const offset = i * 30; // Modify this value to set the vertical offset between the lines
+        const offset = i * 6; // Modify this value to set the vertical offset between the lines
 
         ctx.beginPath();
         ctx.moveTo(-currentAngle, canvas.height / 2 + offset);
 
         for (let x = 0; x <= canvas.width; x++) {
           const angle = ((x - currentAngle) / canvas.width) * endAngle;
-          const y = 0.1 * Math.sin((angle * Math.PI) / 180) * (canvas.height / 2) + (canvas.height / 2) + offset;
+          const y = 0.06 * Math.sin((angle * Math.PI) / 180) * (canvas.height / 2) + (canvas.height / 2) + offset;
           ctx.lineTo(x, y);
-          console.log(x, y);
+          // console.log(x, y);
         }
 
         ctx.strokeStyle = color;
-        ctx.lineWidth = 30;
+        ctx.lineWidth = 6;
         ctx.stroke();
       }
 

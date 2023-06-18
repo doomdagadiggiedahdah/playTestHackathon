@@ -224,3 +224,10 @@ body {
   z-index: 5;
 }
 
+#canvas {
+  transition: transform 0.2s ease;
+}
+
+#video {
+  transform: translate(60px, 30px);
+}
