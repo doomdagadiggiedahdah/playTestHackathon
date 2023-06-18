@@ -19,11 +19,8 @@ for (let i = 0; i < brandImageAssets.length; i++) {
 }
 let brandColorsArray = [];
 let distilledColorsArray = [];
-let keywordsArray = [
-  'bold',
-  'energetic',
-  'adventurous'
-]
+let keywordsArray = ['bold', 'energetic', 'adventurous'];
+let addedBrandedKeywordsArray = [];
 const colorThief = new ColorThief();
 
 let promises = [];
@@ -164,6 +161,29 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+async function readJsonFile(filename) {
+  const response = await fetch(filename);
+  const data = await response.json();
+  return data;
+}
+
+// function addKeywordTagOnClick() {
+//   // Get the input value from the keywordsField
+//   const newKeyword = document.getElementById("keywords-field").value;
+
+//   // Check if the input value is not empty
+//   if (newKeyword.trim() !== "") {
+//     // Create a new keyword-tag
+//     createKeywordTag(newKeyword);
+
+//     // Add the new keyword to the keywordsArray
+//     keywordsArray.push(newKeyword);
+
+//     // Clear the input field
+//     document.getElementById("keywords-field").value = "";
+//   }
+// }
+
 async function scrapeToGen(url) {
   // referencing relevant elements
   const targetDiv = document.getElementById('input-field');
@@ -180,6 +200,10 @@ async function scrapeToGen(url) {
 
   // pythonProcess.stdin.write(url); // Write the image buffer to Python script's stdin
   // pythonProcess.stdin.end();
+
+  const brandKeywordsJsonFilename = "brand_scraper/cleaned_brand_keywords.json";
+  keywordsArray = await readJsonFile(brandKeywordsJsonFilename);
+  keywordsArray = keywordsArray.slice(0, 30);
 
   // Expand dark blue original container (note: make this run upon getting .py data back)
   await new Promise(resolve => setTimeout(resolve, 3000));
@@ -287,7 +311,7 @@ async function scrapeToGen(url) {
   keywordsContainer.id = 'keywords-container';
   keywordsContainer.style.display = "flex";
   keywordsContainer.style.flexDirection = "column";
-  const keywordsField = document.createElement('input');
+  const keywordsField = document.createElement('div');
   keywordsField.id = "keywords-field";
   keywordsField.addEventListener('keydown', function(e) {
     let newTag = keywordsField.value;
@@ -295,6 +319,9 @@ async function scrapeToGen(url) {
       createKeywordTag(newTag)
       keywordsField.value = '';
     }
+  });
+  keywordsField.addEventListener('click', function(e) {
+    addKeywordTagOnClick();
   });
   keywordsContainer.addEventListener('click', (event) => {
     const target = event.target;
@@ -312,7 +339,9 @@ async function scrapeToGen(url) {
   keywordsColumn.appendChild(keywordsContainer);
   keywordsColumn.style.opacity = 1.0;
 
-  createKeywordTagOnDelay(keywordsArray);
+  console.log(keywordsArray)
+
+  await createKeywordTagOnDelay(keywordsArray);
 
   // space for Mat to write row #3
   const campaignHeader = document.createElement('p');
@@ -486,19 +515,36 @@ async function scrapeToGen(url) {
   });
 }
 
-async function createKeywordTagOnDelay(array) {
-  for (let i = 0; i < array.length; i++) {
-    const keyword = array[i];
+async function createKeywordTagOnDelay(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    const keyword = arr[i];
     createKeywordTag(keyword);
+    await new Promise(resolve => setTimeout(resolve, 300));
   }
 }
 
-async function createKeywordTag(keyword) {
+function createKeywordTag(keyword, isAdded = false) {
   const keywordsRow = document.getElementById("keywords-row");
-  const keywordsContainer = document.getElementById("keywords-container");
+  const keywordsField = document.getElementById("keywords-field");
   const tag = document.createElement('span');
   tag.className = 'keyword-tag';
   tag.textContent = keyword;
+
+  // Add click event listener to the tag
+  tag.addEventListener('click', function() {
+    if (isAdded) {
+      // Remove the keyword tag from the keywords-field
+      tag.remove();
+      // Add the keyword tag back to the keywords-row
+      createKeywordTag(keyword);
+    } else {
+      // Remove the keyword tag from the keywords-row
+      tag.remove();
+      // Add the keyword tag to the keywords-field
+      keywordsField.appendChild(tag);
+      createKeywordTag(keyword, true);
+    }
+  });
 
   // Create the delete button for the tag
   const deleteButton = document.createElement('span');
@@ -508,8 +554,12 @@ async function createKeywordTag(keyword) {
   // Append the delete button to the tag
   tag.appendChild(deleteButton);
 
-  // Append the tag to the keywords field
-  keywordsRow.appendChild(tag);
+  // Append the tag to the keywords-row or keywords-field based on the `isAdded` flag
+  if (isAdded) {
+    keywordsField.appendChild(tag);
+  } else {
+    keywordsRow.appendChild(tag);
+  }
 }
 
 async function createImagesWithDelay(row) {
