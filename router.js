@@ -235,8 +235,6 @@ async function scrapeToGen(url) {
   smallTextRow.appendChild(emailText);
   smallTextRow.style.opacity = 1.0;
 
-  await new Promise(resolve => setTimeout(resolve, 600));
-
   // Creating the brand info row
   const brandHeader = document.createElement('p');
   brandHeader.id = "brand-header";
@@ -250,8 +248,6 @@ async function scrapeToGen(url) {
   brandRow.id = "brand-row";
   brandSection.appendChild(brandRow);
   brandSection.style.opacity = 1.0;
-
-  await new Promise(resolve => setTimeout(resolve, 600));
 
   // assets column
   const assetsColumn = document.createElement('div');
@@ -272,12 +268,9 @@ async function scrapeToGen(url) {
   assetsColumn.appendChild(colorAssetsRow);
   assetsColumn.style.opacity = 1.0;
 
-  await new Promise(resolve => setTimeout(resolve, 600));
   createImagesWithDelay(imageAssetsRow);
 
-  await new Promise(resolve => setTimeout(resolve, 1800));
   createCirclesWithDelay(colorAssetsRow);
-  await new Promise(resolve => setTimeout(resolve, 2000));
 
   // keywords column
   const keywordsColumn = document.createElement('div');
@@ -321,8 +314,6 @@ async function scrapeToGen(url) {
 
   createKeywordTagOnDelay(keywordsArray);
 
-  await new Promise(resolve => setTimeout(resolve, 1200));
-
   // space for Mat to write row #3
   const campaignHeader = document.createElement('p');
   const campaignInputField = document.createElement('input');
@@ -343,27 +334,44 @@ async function scrapeToGen(url) {
     const overlay = document.createElement('div');
     overlay.id = "overlay";
     const vidContainer = document.createElement('div');
+    vidContainer.id = "vid-container";
     const video = document.createElement('video');
+    video.id = "video";
     video.addEventListener('click', function() {
       video.play();
     });
-    video.src = "pixel_test.mp4";
+    video.src = "bing_chilling.mp4";
     video.style.width = "600px";
     video.style.height = "300px";
     video.style.position = "absolute";
     const canvas = document.createElement('canvas');
+    canvas.style.display = "none";
+    canvas.id = "draw-canvas";
     canvas.style.transform = "translateY(150px)";
     canvas.style.zIndex = "100";
     canvas.style.position = "absolute";
     const colors = distilledColorsArray.slice(2, 5);
     document.body.appendChild(overlay);
     document.body.appendChild(vidContainer);
+    vidContainer.appendChild(video);
+    vidContainer.appendChild(canvas);
+    let animationIntervalId;
 
     // Add event listener for 'play' event
     video.addEventListener('play', function() {
       // Start the animation when the video starts playing
-      document.body.appendChild(canvas);
-      animate();
+      canvas.style.display = "flex";
+      animationIntervalId = setInterval(animate, 10);
+    });
+
+    video.addEventListener('pause', function() {
+      // Pause the animation when the video is paused
+      clearInterval(animationIntervalId);
+    });
+    
+    video.addEventListener('ended', function() {
+      // Stop the animation when the video ends
+      clearInterval(animationIntervalId);
     });
 
     // Get the canvas context
@@ -376,7 +384,6 @@ async function scrapeToGen(url) {
 
     // Define the animation duration and update interval
     const duration = 4000; // Adjust this for speed
-    const interval = 10;
 
     // Define the start and end angles for the sine curve
     const startAngle = 0;
@@ -386,9 +393,8 @@ async function scrapeToGen(url) {
     const frames = Math.ceil(duration / interval);
     const angleIncrement = (endAngle - startAngle) / frames;
 
-
     function animate() {
-      // Clear the canvas
+      // // Clear the canvas
       if (video.ended) {
         return;
       }
@@ -396,6 +402,7 @@ async function scrapeToGen(url) {
 
       // Calculate the current angle based on time elapsed
       const elapsed = performance.now();
+      console.log(elapsed);
       const currentAngle = startAngle + ((elapsed / duration) * (endAngle - startAngle));
 
       // Set the line cap style to round
@@ -413,6 +420,7 @@ async function scrapeToGen(url) {
           const angle = ((x - currentAngle) / canvas.width) * endAngle;
           const y = 0.1 * Math.sin((angle * Math.PI) / 180) * (canvas.height / 2) + (canvas.height / 2) + offset;
           ctx.lineTo(x, y);
+          console.log(x, y);
         }
 
         ctx.strokeStyle = color;
@@ -432,7 +440,6 @@ async function createKeywordTagOnDelay(array) {
   for (let i = 0; i < array.length; i++) {
     const keyword = array[i];
     createKeywordTag(keyword);
-    await new Promise(resolve => setTimeout(resolve, 300));
   }
 }
 
@@ -457,7 +464,6 @@ async function createKeywordTag(keyword) {
 
 async function createImagesWithDelay(row) {
   for (let i = 0; i < assetsArray.length; i++) {
-    await new Promise((resolve) => setTimeout(resolve, 300));
     const imgAsset = assetsArray[i];
     imgAsset.className = "image-asset";
     imgAsset.style.height = "66px";
@@ -465,7 +471,6 @@ async function createImagesWithDelay(row) {
     imgAsset.style.opacity = 1.0;
     row.appendChild(imgAsset);
   }
-  await new Promise((resolve) => setTimeout(resolve, 300));
 
   // add the upload button here
   const uploadButton = document.createElement('label');
@@ -524,7 +529,6 @@ function handleFileUpload(event) {
 
 async function createCirclesWithDelay(row) {
   for (let i = 0; i < distilledColorsArray.length; i++) {
-    await new Promise((resolve) => setTimeout(resolve, 300));
     let hoverHex = document.createElement('div');
     let hexAsString = distilledColorsArray[i].toString();
     hoverHex.textContent = hexAsString;
@@ -563,7 +567,6 @@ async function createCirclesWithDelay(row) {
     row.appendChild(circle);
     circle.style.opacity = 1.0;
   }
-  await new Promise(resolve => setTimeout(resolve, 300));
 
     // Create the add hex color
   const uploadButton = document.createElement('div');
