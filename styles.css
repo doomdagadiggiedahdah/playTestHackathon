@@ -1,8 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,600;1,300&display=swap');
 
+ /* animation definitions */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* HTML shit */
 body {
   display: flex;
   font-family: 'Roboto Mono', monospace;
+  font-weight: bold;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -10,6 +22,10 @@ body {
   margin: 0;
   padding: 0;
   background-color: #e6e6e6;
+}
+
+.section-header, .image-asset {
+  animation: fadeIn 0.5s ease forwards;
 }
 
 #playtest-header-text {
@@ -20,6 +36,11 @@ body {
   color: #141134;
   transition: color 0.8s ease, left 0.4s ease, top 0.4s ease;
   z-index: 3;
+}
+
+#webpageInput {
+  font-family: 'Roboto Mono';
+  font-weight: bold;
 }
 
 #asset-container-div {
@@ -37,9 +58,10 @@ body {
   transition: opacity 0.8s ease;
 }
 
-#small-text-row, #brand-row, #image-assets-row, #color-assets-row, #keywords-row {
+#small-text-row, #brand-row, #image-assets-row, #color-assets-row {
   display: flex;
   flex-direction: row;
+  animation: fadeIn 0.5s ease forwards;
 }
 
 #small-text-row {
@@ -47,18 +69,66 @@ body {
   justify-content: space-between;
 }
 
+#keywords-column {
+  position: relative;
+}
+
+#keywords-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 50px; /* Adjust this value based on the desired minimum height */
+}
+
 #keywords-row {
-  display: inline-flex;
+  /* position: absolute; */
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   padding-left: 22px;
-  margin-top: 6px;
+  margin-top: 2vh;
+  max-width: calc(35vw - 40px); /* Adjust the value 40px to control the space before reaching the end of the screen width */
+  gap: 4px; /* Add space between buttons */
+  animation: fadeIn 0.5s ease forwards;
 }
 
 .keyword-tag {
+  position: relative;
   margin-right: 8px;
+  margin-bottom: 4px;
   background-color: lightgray;
   color: rgb(90, 90, 90);
   padding: 3px 8px;
   border-radius: 20px;
+  animation: fadeIn 0.5s ease forwards;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.keyword-tag:hover {
+  background-color: #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.delete-button {
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff4d4d;
+  color: white;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+  background-color: #ff1a1a;
 }
 
 #brand-row {
@@ -89,6 +159,7 @@ body {
 
 .hex-circle {
   transition: opacity 0.4s ease;
+  animation: fadeIn 0.5s ease forwards;
   opacity: 0.0;
   border-radius: 50%;
   width: 40px;
