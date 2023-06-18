@@ -5,7 +5,7 @@ import ColorThief from './colorthief/dist/color-thief.mjs'
 
 let email;
 let indexingUrl;
-let randText = "Here is a respectful observation of your brand";
+let randText = "Here is a respectful observation of your brand. Here is a respectful observation of your brand. Here is a respectful observation of your brand";
 let brandImageAssets = [
   "https://www.nike.com/images/nike-logo.png",
   "https://www.coca-cola.com/content/dam/brands/global/coca-cola/logo/logo-red.png",
@@ -180,10 +180,12 @@ async function scrapeToGen(url) {
   const contentButton = document.createElement('button');
   contentButton.textContent = 'Update Generated Content';
   contentButton.id = 'updateButton';
+  contentButton.style.fontSize = '20px';
   contentButton.style.position = 'absolute';
   contentButton.style.bottom = '20px';
   contentButton.style.right = '20px';
-  contentButton.style.width = "200px";
+  contentButton.style.width = "250px";
+  contentButton.style.height = '100px';
   assetContainerDiv.appendChild(contentButton)
 
   
@@ -289,7 +291,11 @@ async function scrapeToGen(url) {
   const campaignInputField = document.createElement('input');
   campaignHeader.textContent = "Campaign Identity";
   campaignHeader.style.fontSize = "30px";
-  campaignHeader.style.color = "#232323";
+  campaignInputField.style.fontSize = "20px";
+  campaignInputField.style.color = "#232323";
+  campaignInputField.style.paddingTop = '5px';
+  campaignInputField.style.height = "200px";
+  campaignInputField.style.width = "500px";
   
   campaignIdentityRow.appendChild(campaignHeader);
   campaignIdentityRow.appendChild(campaignInputField);
