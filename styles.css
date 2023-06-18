@@ -6,13 +6,122 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
+  background-color: #e6e6e6;
 }
 
-h1, input, button {
-  margin-bottom: 10px;
+#playtest-header-text {
+  font-size: 36px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  color: #141134;
+  transition: color 0.8s ease, left 0.4s ease, top 0.4s ease;
+  z-index: 3;
+}
+
+#asset-container-div {
+  background-color: #f6f6f6;
+  position: absolute;
+  transition: width 0.8s ease, height 0.8s ease;
+  border-radius: 20px;
+  transform: translateY(20px);
+  display: flex;
+  flex-direction: column;
+}
+
+#small-text-row, #brand-row, #image-assets-row, #color-assets-row {
+  display: flex;
+  flex-direction: row;
+}
+
+#small-text-row {
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+#brand-row {
+  justify-content: space-evenly;
+  display: inline-flex;
+}
+
+.hex-color {
+  transition: opacity 0.3s ease;
+}
+
+#campaign-identity-row {
+  display: flex;
+  flex-direction: column;
+}
+
+#update-generated-content {
+  display: flex;
+  flex-direction: row;
+}
+
+
+#loading-brand-icon {
+  width: 50px;
+  height: 50px;
 }
 
 #input-field {
   border-radius: 20px;
-  background-color: #B474E7;
+  background-color: #141134;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  width: 354px;
+  height: 262px;
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+#input-field h2 {
+  color: white;
+  font-size: 30px;
+  text-align: center;
+  padding: 4px 20px;
+}
+
+#input-field p {
+  margin: 20px 20px;
+  padding: 0;
+  color: white;
+  font-size: 16px;
+  text-align: left;
+  width: 300px;
+}
+
+#input-field input {
+  border-radius: 10px;
+  border: none;
+  padding: 4px;
+  padding-left: 10px;
+  margin: 2px 20px;
+  height: 30px;
+  width: 300px;
+  transition: width 0.1s ease, padding 0.1s ease, padding-left 0.1s ease;
+}
+
+#input-field button {
+  margin-top: 12px;
+  padding: 6px;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  background-color: #88EA66;
+  width: 150px;
+  margin-bottom: 30px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+#splash-logo {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 200px;
+  height: 200px;
+  z-index: 1;
 }
